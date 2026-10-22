@@ -1578,7 +1578,57 @@
         }
       }
 
-      // 3. WHATSAPP FORMATADO COM AS 9 RESPOSTAS
+      // 3. DISPARO DE EVENTO PERSONALIZADO: form_submit / FormSubmit
+      try {
+        const eventData = {
+          event: 'form_submit',
+          form_name: 'diagnostico_tributario_barroco',
+          lead_nome: nome,
+          lead_email: email,
+          lead_telefone: telefone,
+          lead_cnpj: cnpj,
+          lead_cargo: cargo,
+          lead_valor_passivo: valor_passivo,
+          utm_source: getUrlParam('utm_source'),
+          utm_medium: getUrlParam('utm_medium'),
+          utm_campaign: getUrlParam('utm_campaign')
+        };
+
+        // Google Tag Manager (dataLayer)
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(eventData);
+
+        // Google Analytics / Ads (gtag)
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'form_submit', {
+            event_category: 'Lead',
+            event_label: 'Diagnostico Tributario',
+            value: valor_passivo
+          });
+        }
+
+        // Meta Pixel (fbq)
+        if (typeof window.fbq === 'function') {
+          window.fbq('trackCustom', 'FormSubmit', eventData);
+          window.fbq('track', 'Lead', { content_name: 'Diagnostico Tributario', content_category: cargo });
+        }
+
+        // Evento DOM Nativo
+        window.dispatchEvent(new CustomEvent('form_submit', { detail: eventData }));
+
+        // PostMessage para a janela pai (WordPress / barrocoadv.com.br)
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({
+            type: 'form_submit',
+            event: 'form_submit',
+            detail: eventData
+          }, '*');
+        }
+      } catch (errEvt) {
+        console.warn('Erro ao disparar evento form_submit:', errEvt);
+      }
+
+      // 4. WHATSAPP FORMATADO COM AS 9 RESPOSTAS
       const message = `*NOVO DIAGNÓSTICO TRIBUTÁRIO ESTRATÉGICO*\n\n` +
                       `👤 *Nome:* ${nome}\n` +
                       `🏢 *CNPJ:* ${cnpj}\n` +
