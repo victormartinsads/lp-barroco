@@ -1289,7 +1289,7 @@
     //    https://barrocoadv.com.br/wp-admin/admin-ajax.php (post_id: 9824, form_id: 22643f7)
     // 2. Se desejar enviar para um Webhook adicional (Make, n8n, Zapier), cole a URL abaixo:
     // =========================================================================
-    const CRM_WEBHOOK_URL = ''; 
+    const CRM_WEBHOOK_URL = 'https://functions-api.clint.digital/endpoints/integration/webhook/fe181aa0-ef07-4c28-9e86-f411ecb9032e'; 
 
     // WhatsApp oficial para atendimento (código do país + DDD + número)
     const WHATSAPP_NUMERO = '';
@@ -1525,7 +1525,42 @@
             body: JSON.stringify({
               evento: 'formulario_estrategico_barroco',
               data_envio: new Date().toISOString(),
-              lead: { nome, cnpj, telefone, email, cargo, divida_ativa, valor_passivo, situacao_debitos, aderiu_parc, valor_entrada, motivacao, investir_assessoria_juridica },
+              nome: nome,
+              name: nome,
+              email: email,
+              telefone: telefone,
+              phone: telefone,
+              whatsapp: telefone,
+              cnpj: cnpj,
+              cargo: cargo,
+              divida_ativa: divida_ativa,
+              valor_passivo: valor_passivo,
+              situacao_debitos: situacao_debitos,
+              aderiu_parc: aderiu_parc,
+              valor_entrada: valor_entrada,
+              motivacao: motivacao,
+              investir_assessoria_juridica: investir_assessoria_juridica,
+              origem: window.location.href,
+              url: window.location.href,
+              utm_source: getUrlParam('utm_source'),
+              utm_medium: getUrlParam('utm_medium'),
+              utm_campaign: getUrlParam('utm_campaign'),
+              utm_term: getUrlParam('utm_term'),
+              utm_content: getUrlParam('utm_content'),
+              lead: {
+                nome,
+                cnpj,
+                telefone,
+                email,
+                cargo,
+                divida_ativa,
+                valor_passivo,
+                situacao_debitos,
+                aderiu_parc,
+                valor_entrada,
+                motivacao,
+                investir_assessoria_juridica
+              },
               tracking: {
                 url: window.location.href,
                 utm_source: getUrlParam('utm_source'),
